@@ -29,7 +29,7 @@ public class FireFightingController {
         if (request.getParameter("endTime") != null){
             queryMap.put("endTime",request.getParameter("endTime"));
         }
-        JSONObject jsonObject = JSONObject.parseObject(InterTest.getResponseByGet(baseUrl,queryMap));
+        JSONObject jsonObject = JSONObject.parseObject(InterTest.get(baseUrl,queryMap));
         return jsonObject;
     }
 
@@ -46,7 +46,7 @@ public class FireFightingController {
         if (request.getParameter("street") != null){
             queryMap.put("street",request.getParameter("street"));
         }
-        JSONObject jsonObject = JSONObject.parseObject(InterTest.getResponseByGet(baseUrl,queryMap));
+        JSONObject jsonObject = JSONObject.parseObject(InterTest.get(baseUrl,queryMap));
         return jsonObject;
     }
 
@@ -74,7 +74,21 @@ public class FireFightingController {
     public JSONObject fireRiskTop(HttpServletRequest request){
         String baseUrl = "http://156.0.15.2:9005/xfService/PTXF/getOneyearsFRCount";
         Map<String, String> queryMap = new HashMap();
-        JSONObject jsonObject = JSONObject.parseObject(InterTest.getResponseByGet(baseUrl,queryMap));
+        if (request.getParameter("code") != null){
+            queryMap.put("code",request.getParameter("code"));
+        }
+        if (request.getParameter("street") != null){
+            queryMap.put("street",request.getParameter("street"));
+        }
+        if (request.getParameter("startTime") != null){
+            queryMap.put("startTime",request.getParameter("startTime").replace("$","+"));
+        }
+        if (request.getParameter("endTime") != null){
+            queryMap.put("endTime",request.getParameter("endTime").replace("$","+"));
+        }
+
+        System.out.println(queryMap);
+        JSONObject jsonObject = JSONObject.parseObject(InterTest.get(baseUrl,queryMap));
         return jsonObject;
     }
 
@@ -88,6 +102,9 @@ public class FireFightingController {
     public JSONObject alertAnalyse(HttpServletRequest request){
         String baseUrl = "http://156.0.15.2:9005/xfService/PTXF/getTwoyearsFRCount";
         Map<String, String> queryMap = new HashMap();
+        if (request.getParameter("startTime") != null){
+            queryMap.put("startTime",request.getParameter("startTime"));
+        }
         JSONObject jsonObject = JSONObject.parseObject(InterTest.getResponseByGet(baseUrl,queryMap));
         return jsonObject;
     }

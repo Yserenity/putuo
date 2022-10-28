@@ -1,10 +1,14 @@
 package com.dataojo.putuo.controller;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.dataojo.putuo.common.Result;
+import com.dataojo.putuo.util.InterTest;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/issue")
@@ -54,4 +58,6 @@ public class IssueController {
         JSONArray jsonObject = JSONArray.parseArray(s);
         return Result.OK("",jsonObject);
     }
+
+
 }

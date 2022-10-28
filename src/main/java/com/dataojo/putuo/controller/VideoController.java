@@ -10,17 +10,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/video")
 public class VideoController {
     @PostMapping("/stream/open")
-    public Result<Object> videoStream(){
+    public Result<Object> videoStream(HttpServletRequest request){
         String baseUrl = "http://10.208.5.10:38502/xf-public-api-device-search/v1/stream/live/open";
-//        String s = "{\"tgt_session_id\": \"xfor_0C637226312769F7FB2029684E6EF971\",\n" +
-//                "        \"send_uri\": \"http://10.171.211.7:8080/api-ex/xfor_0C637226312769F7FB2029684E6EF971/31010723001181052001.m3u8\"}";
-//        JSONObject jsonObject = JSONObject.parseObject(s);
-        String data = "{\"deviceId\":\"31010724001321053010\",\"protocol\":\"hls\",\"resolution\":\"HD\"}";
+         String deviceId = JSONObject.parseObject(InterTest.readRequestStream(request)).getString("deviceId");
+
+        String data = "{\"deviceId\":\"" + deviceId + "\",\"protocol\":\"hls\",\"resolution\":\"HD\"}";
         JSONObject jsonObject = JSONObject.parseObject(InterTest.post(baseUrl,data));
         JSONObject jsonObject1 = jsonObject.getJSONObject("data");
         return Result.OK("",jsonObject1);

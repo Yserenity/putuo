@@ -1,5 +1,12 @@
 package com.dataojo.putuo.util;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -54,8 +61,11 @@ public class InterTest {
             httpConc.setConnectTimeout(60000);
             httpConc.setReadTimeout(300000);
             httpConc.setRequestMethod("GET");
+            httpConc.setRequestProperty("accept", "*/*");
+            httpConc.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
             httpConc.connect();
             result = readStreamToStr(httpConc);
+            System.out.println(result);
 //            log.info("response =" + respsonse);
         }catch (Exception e){
             e.printStackTrace();
@@ -89,6 +99,30 @@ public class InterTest {
                 reader = new BufferedReader(new InputStreamReader(httpConc.getInputStream()));
             }else{
                 reader = new BufferedReader(new InputStreamReader(httpConc.getErrorStream()));
+            }
+            StringBuilder sb = new StringBuilder(); String lines;
+            while((lines = reader.readLine()) != null){
+                sb.append(lines);
+            }
+            String resStr = sb.toString();
+            return resStr;
+        }catch(Exception e){
+            e.printStackTrace(); return null;
+        }
+    }
+
+    //流转字符串
+    private static String readStreamToStrGet(HttpResponse response){
+        try{
+            int responseCode = response.getStatusLine().getStatusCode();
+            // 获取响应消息实体
+            HttpEntity httpEntity = response.getEntity();
+//            log.info("responseCode = " + responseCode);
+            BufferedReader reader = null;
+            if(responseCode == 200){
+                reader = new BufferedReader(new InputStreamReader(httpEntity.getContent()));
+            }else{
+                reader = new BufferedReader(new InputStreamReader(httpEntity.getContent()));
             }
             StringBuilder sb = new StringBuilder(); String lines;
             while((lines = reader.readLine()) != null){
@@ -174,5 +208,20 @@ public class InterTest {
             e.printStackTrace();
         }
         return data;
+    }
+
+    public static String get(String baseUrl,Map<String, String> queryMap){
+        String result = null;
+        try{
+            String url = handleQuery(baseUrl, queryMap);
+            CloseableHttpClient closeableHttpClient = HttpClients.createDefault();
+            HttpGet httpGet = new HttpGet(url);
+            HttpResponse httpResponse = closeableHttpClient.execute(httpGet);
+            result = readStreamToStrGet(httpResponse);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return result;
     }
 }

@@ -75,4 +75,30 @@ public class CityPoliceController {
         JSONObject jsonObject = JSONObject.parseObject(InterTest.getResponse(baseUrl,InterTest.readRequestStream(request)));
         return jsonObject;
     }
+
+    /**
+     * @program:
+     * @description:工单明细
+     * @author: hlh
+     * @date: 2022/10/26 14:04
+     */
+    @PostMapping("/order-detail")
+    public JSONObject orderDetail(HttpServletRequest request){
+        String baseUrl = "http://172.23.56.68/gatehub/rsdb_test-00001/api/datashare/share/api/RSDB_SDB_DTL_ZWFW_DM_CSZP_GDMXSJ_A_D/v1";
+        JSONObject jsonObject = JSONObject.parseObject(InterTest.getResponse(baseUrl,InterTest.readRequestStream(request)));
+        return jsonObject;
+    }
+
+    /**
+     * @program:
+     * @description:事件流程
+     * @author: hlh
+     * @date: 2022/10/26 14:04
+     */
+    @PostMapping("/issue-flow-count")
+    public JSONObject issueFlowCount(HttpServletRequest request){
+        String baseUrl = "http://172.23.56.68/gatehub/rsdb_test-00001/api/datashare/share/api/RSDB_SDB_STS_CSFW_DM_PDSJSLTJ_A_D/v1";
+        JSONObject jsonObject = JSONObject.parseObject(InterTest.getResponse(baseUrl,InterTest.readRequestStream(request)));
+        return jsonObject;
+    }
 }
