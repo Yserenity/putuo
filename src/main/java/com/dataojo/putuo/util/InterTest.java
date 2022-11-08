@@ -50,7 +50,7 @@ public class InterTest {
         }
         return result;
     }
-    //get请求
+    //消防请求
     public static String getResponseByGet(String baseUrl,Map<String, String> queryMap){
         String result = null;
         try {
@@ -62,11 +62,52 @@ public class InterTest {
             httpConc.setReadTimeout(300000);
             httpConc.setRequestMethod("GET");
             httpConc.setRequestProperty("accept", "*/*");
-            httpConc.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
             httpConc.connect();
             result = readStreamToStr(httpConc);
-            System.out.println(result);
 //            log.info("response =" + respsonse);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return result;
+    }
+    //图层get请求
+    public static String getResponseByMap(String baseUrl,Map<String, String> queryMap,String headers){
+        String result = null;
+        try {
+            String _url = handleQuery(baseUrl, queryMap);
+            URL url = new URL(_url);
+//            log.info("url: " + url);
+            HttpURLConnection httpConc = (HttpURLConnection) url.openConnection();
+            httpConc.setConnectTimeout(60000);
+            httpConc.setReadTimeout(300000);
+            httpConc.setRequestMethod("GET");
+            httpConc.setRequestProperty("accept", "*/*");
+            httpConc.setRequestProperty("cd-token",headers);
+            httpConc.connect();
+            result = readStreamToStr(httpConc);
+//            log.info("response =" + respsonse);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return result;
+    }
+    //图层post请求
+    public static String getResponseByMap(String baseUrl,String data,String headers){
+        String result = null;
+        try {
+            Map<String, String> queryMap = new HashMap();
+            String _url = handleQuery(baseUrl, queryMap);
+            URL url = new URL(_url);
+//            log.info("url: " + url);
+            HttpURLConnection httpConc = (HttpURLConnection) url.openConnection();
+            httpConc.setConnectTimeout(60000);
+            httpConc.setReadTimeout(300000);
+            httpConc.setRequestProperty("Content-Type", "application/json");
+            httpConc.setRequestProperty("cd-token",headers);
+            String encryptedData = data;
+            result = doPost(httpConc, encryptedData);
+//            log.info("response =" + respsonse);
+            httpConc.disconnect();
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -148,7 +189,6 @@ public class InterTest {
     }
     //SHA256转码
     private static String signature(String clientId, String clientSecret, long timestamp) throws NoSuchAlgorithmException {
-        System.out.println("timestamp :" + timestamp);
         String strToSignature = String.format("%s&%s&%d", clientId, clientSecret, timestamp);
         MessageDigest messageDigest = MessageDigest.getInstance("SHA-256"); messageDigest.update(strToSignature.getBytes());
         byte byteBuffer[] = messageDigest.digest();
@@ -161,7 +201,6 @@ public class InterTest {
             strHexString.append(hex);
         }
         String signature = strHexString.toString();
-        System.out.println("signature:" + signature);
         return signature;
     }
 
@@ -216,6 +255,7 @@ public class InterTest {
             String url = handleQuery(baseUrl, queryMap);
             CloseableHttpClient closeableHttpClient = HttpClients.createDefault();
             HttpGet httpGet = new HttpGet(url);
+            httpGet.setHeader("cd-token","IPhj81.qyUqPr.wWJDx6");
             HttpResponse httpResponse = closeableHttpClient.execute(httpGet);
             result = readStreamToStrGet(httpResponse);
         }catch (Exception e){
