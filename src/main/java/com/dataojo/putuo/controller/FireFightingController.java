@@ -3,9 +3,11 @@ package com.dataojo.putuo.controller;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.dataojo.putuo.common.Result;
+import com.dataojo.putuo.configuration.StaticScheduleTask;
 import com.dataojo.putuo.entity.Fire;
 import com.dataojo.putuo.util.InterTest;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -112,59 +114,101 @@ public class FireFightingController {
 
     /**
      * @description:本年各月警情数量
-     * @param request
      * @return
      */
     @GetMapping("/police-type-count-month")
-    public Result fireCountByMonth(HttpServletRequest request){
-        String baseUrl = "http://10.208.75.21:9005/xfService/PTXF/getFiveYearsPoliceInformationMonth";
-        Map<String, String> queryMap = new HashMap();
-        if (request.getParameter("street") != null){
-            queryMap.put("street",request.getParameter("street"));
-        }
-        JSONObject jsonObject = JSONObject.parseObject(InterTest.getResponseByGet(baseUrl,queryMap));
-        //获取data
+    public Result fireCountByMonth(){
+        Result result = StaticScheduleTask.result;
+        if (result != null){
+            return result;
+        }else {
+            String baseUrl = "http://10.208.75.21:9005/xfService/PTXF/getFiveYearsPoliceInformationMonth";
+            Map<String, String> queryMap = new HashMap();
+            JSONObject jsonObject = JSONObject.parseObject(InterTest.getResponseByGet(baseUrl,queryMap));
+            //获取data
 //        JSONObject jsonObject1 = JSONObject.parseObject("");
-        Map<String,Object> map = new HashMap<>();
-        JSONArray jsonArray = jsonObject.getJSONArray("data");
-        //循环获取社会救助、抢险救援、火警的数据
-        jsonArray.stream().forEach(array->{
-            JSONObject jsonObject1 = (JSONObject) JSONObject.toJSON(array);
-            //按照yearAndMonth分组
-            List<Fire> list = jsonObject1.getJSONArray("list").toJavaList(Fire.class);
-            List<Fire> fireList = new ArrayList<>();
-            list.stream().sorted(Comparator.comparing(Fire::getYearAndMonth))
-                    .collect(Collectors.groupingBy(Fire::getYearAndMonth, Collectors.toList()))
-                    .forEach((id,transfer)->{
-                        transfer.stream()
-                                .reduce((a,b)->new Fire(a.getYearAndMonth(),a.getCounts()+ b.getCounts(),null,a.getCaseType()))
-                                .ifPresent(fireList::add);
-                    });
-            map.put(list.get(0).getCaseType(),fireList);
-        });
-        return Result.OK("",map);
+            Map<String,Object> map = new HashMap<>();
+            JSONArray jsonArray = jsonObject.getJSONArray("data");
+            //循环获取社会救助、抢险救援、火警的数据
+            jsonArray.stream().forEach(array->{
+                JSONObject jsonObject1 = (JSONObject) JSONObject.toJSON(array);
+                //按照yearAndMonth分组
+                List<Fire> list = jsonObject1.getJSONArray("list").toJavaList(Fire.class);
+                List<Fire> fireList = new ArrayList<>();
+                //排序、分组、循环总和数量、添加
+                list.stream().sorted(Comparator.comparing(Fire::getYearAndMonth))
+                        .collect(Collectors.groupingBy(Fire::getYearAndMonth, Collectors.toList()))
+                        .forEach((id,transfer)->{
+                            transfer.stream()
+                                    .reduce((a,b)->new Fire(a.getYearAndMonth(),a.getCounts()+ b.getCounts(),null,a.getCaseType()))
+                                    .ifPresent(fireList::add);
+                        });
+                map.put(list.get(0).getCaseType(),fireList);
+            });
+            StaticScheduleTask.result = Result.OK("",map);
+            return Result.OK("",map);
+        }
     }
 
-    @GetMapping
-    public Result policCountByMonth(HttpServletRequest request){
-        String[] strs = new String[]{"社会救助","抢险救援","火灾"};
-        int count = 0;
-        JSONObject jsonObject = (JSONObject) JSONObject.toJSON(fireCountByMonth(request));
-        for(int i = 0; i < 12; i++){
-            for(int j = 0; j < strs.length; j++){
-                System.out.println(jsonObject.getJSONObject("result").getJSONArray(strs[j]).getJSONObject(i).get("counts").toString());
+    @GetMapping("/police-count-month")
+    public Result policCountByMonth(){
+        Result result = StaticScheduleTask.fireList;
+        if(result != null){
+            return result;
+        }else{
+            JSONObject jsonObject = (JSONObject) JSONObject.toJSON(fireCountByMonth());
+            String[] strs = new String[]{"社会救助","抢险救援","火灾"};
+            List<Fire> fireList = new ArrayList<>();
+            int count = 0;
+            //12个月、3个分类
+            for(int i = 0; i < 12; i++){
+                for(int j = 0; j < strs.length; j++){
+                    count = count + Integer.parseInt(jsonObject.getJSONObject("result").getJSONArray(strs[j]).getJSONObject(i).get("counts").toString());
+                }
+                fireList.add(new Fire((String) jsonObject.getJSONObject("result").getJSONArray(strs[0]).getJSONObject(i).get("yearAndMonth"),count,null,null));
+                count = 0;
             }
-
+            StaticScheduleTask.fireList = Result.OK("",fireList);
+            return Result.OK("",fireList);
         }
-        return null;
     }
 
     @GetMapping
     public JSONObject fireCountByStreet(HttpServletRequest request){
         //请求地址
         String baseUrl = "http://10.208.75.21:9005/xfService/PTXF/getFiveYearsPoliceInformationMonth";
+        String[] strs = new String[]{"0705","0714","0715","0716","0717","0720","0721","0722","0723","0724"};
         //循环获取每个街镇的火警、抢险、社会救助的数量
+        Map<String, String> queryMap = new HashMap();
+        if (request.getParameter("street") != null){
+            queryMap.put("street",request.getParameter("street"));
+        }
+        JSONObject jsonObject = JSONObject.parseObject(InterTest.getResponseByGet(baseUrl,queryMap));
+        JSONArray jsonArray = jsonObject.getJSONArray("data");
+        Map<String,Object> map = new HashMap<>();
+        //循环火灾、抢险
+        jsonArray.stream().forEach(array ->{
+            JSONObject jsonObject1 = (JSONObject) JSONObject.toJSON(array);
+            List<Fire> list = jsonObject1.getJSONArray("list").toJavaList(Fire.class);
+            List<Fire> fireList = new ArrayList<>();
+            int count = list.stream().filter(fire -> "2022".equals(fire.getYearAndMonth().substring(0,4)))
+                    .map(Fire::getCounts)
+                    .reduce((a,b) -> a + b)
+                    .get();
+            map.put(jsonObject1.getString("name"),count);
+        });
         return null;
+    }
+
+    /**
+     * @description：消防事件明细
+     * @return
+     */
+    @PostMapping("/fire-detail")
+    public JSONObject fireDetail(HttpServletRequest request){
+        String baseUrl = "http://10.208.75.21:9002/xfService/PTXF/getPoliceInformationInfo";
+        JSONObject jsonObject = JSONObject.parseObject(InterTest.getResponse(baseUrl,InterTest.readRequestStream(request)));
+        return jsonObject;
     }
 
     @GetMapping("/fireFighting-chart")

@@ -173,11 +173,6 @@ public class CityPoliceController {
     @PostMapping("/order-detail")
     public JSONObject orderDetail(HttpServletRequest request){
         String baseUrl = "http://172.23.56.68/gatehub/rsdb_test-00001/api/datashare/share/api/RSDB_SDB_DTL_ZWFW_DM_CSZP_GDMXSJ_A_D/v1";
-//        JSONObject jsonObject1 = JSONObject.parseObject(InterTest.readRequestStream(request));
-//        String wtlymc = jsonObject1.getString("WTLYMC");
-//        if ("全部".equals(wtlymc)){
-//            baseUrl = "http://156.0.15.2:9005/xfService/alarm/getAlarmEntry";
-//        }
         JSONObject jsonObject = JSONObject.parseObject(InterTest.getResponse(baseUrl,InterTest.readRequestStream(request)));
         return jsonObject;
     }
@@ -229,9 +224,14 @@ public class CityPoliceController {
         return jsonObject;
     }
 
+    /**
+     * @description:街镇间隔时间
+     * @param request
+     * @return
+     */
     @PostMapping("/street-interval-time")
     public JSONObject streetIntervalTime(HttpServletRequest request){
-        String baseUrl = "http://172.23.56.68/gatehub/rsdb_test-00001/api/datashare/share/api/RSDB_STB_STS_YLWS_SMYCSLXXB_A_D/v1";
+        String baseUrl = "http://172.23.56.68/gatehub/rsdb_test-00001/api/datashare/share/api/RSDB_SDB_DTL_YLWS_JZHSCSJGSJ_A_D/v1";
         JSONObject jsonObject = JSONObject.parseObject(InterTest.getResponse(baseUrl,InterTest.readRequestStream(request)));
         return jsonObject;
     }
