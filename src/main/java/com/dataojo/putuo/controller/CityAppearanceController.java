@@ -19,7 +19,7 @@ public class CityAppearanceController {
     */
     @PostMapping("/disposal-power")
     public JSONObject disposalPower(HttpServletRequest request){
-        String baseUrl = "http://172.23.56.68/gatehub/rsdb_test-00001/api/datashare/share/api/RSDB_SDB_STS_GGAQ_JDZB_A_D/v1";
+        String baseUrl = "http://172.23.56.68/gatehub/rsdb_test-00001/api/datashare/share/api/RSDB_SDB_STS_GGAQ_JDZB_A_D_DAMENG/v1";
         JSONObject jsonObject = JSONObject.parseObject(InterTest.getResponse(baseUrl,InterTest.readRequestStream(request)));
         return jsonObject;
     }
@@ -31,7 +31,7 @@ public class CityAppearanceController {
     */
     @PostMapping("/street-down")
     public JSONObject streetDown(HttpServletRequest request){
-        String baseUrl = "http://172.23.56.68/gatehub/rsdb_test-00001/api/datashare/share/api/RSDB_TDB_DTL_TSZL_CYZP_JTSJ_A_D_R_CSZMZJZTJ/v1";
+        String baseUrl = "http://172.23.56.68/gatehub/rsdb_test-00001/api/datashare/share/api/TDB_DTL_TSZL_CYZP_JTSJ_A_D_1/v1";
         JSONObject jsonObject = JSONObject.parseObject(InterTest.getResponse(baseUrl,InterTest.readRequestStream(request)));
         return jsonObject;
     }
@@ -43,7 +43,7 @@ public class CityAppearanceController {
     */
     @PostMapping("/area-population")
     public JSONObject areaPopulation(HttpServletRequest request){
-        String baseUrl = "http://172.23.56.68/gatehub/rsdb_test-00001/api/datashare/share/api/RSDB_TDB_DTL_TSZL_CYZP_JTSJ_A_D_R_CSZMQURK/v1";
+        String baseUrl = "http://172.23.56.68/gatehub/rsdb_test-00001/api/datashare/share/api/TDB_DTL_TSZL_CYZP_JTSJ_A_D/v1";
         JSONObject jsonObject = JSONObject.parseObject(InterTest.getResponse(baseUrl,InterTest.readRequestStream(request)));
         return jsonObject;
     }

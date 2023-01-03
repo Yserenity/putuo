@@ -300,4 +300,10 @@ public class VideoController {
         JSONObject jsonObject = JSONObject.parseObject(InterTest.getResponseByMap(baseUrl,data,"o7KvLA.YlN9UX.WvQLzf"));
         return jsonObject;
     }
+
+    @PostMapping("/get-grid-info")
+    public JSONObject getGridInfo(HttpServletRequest request){
+        String baseUrl = "http://158.10.0.222/wk/proxy/CoordReverse/mapTransform/hitLocationInfoByXY";
+        return JSONObject.parseObject(InterTest.getResponseByMap(baseUrl,InterTest.readRequestStream(request),"sB1OHv.t53CzK.cjQkEi"));
+    }
 }

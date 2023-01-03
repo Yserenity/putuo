@@ -23,7 +23,7 @@ public class CityPoliceController {
     */
     @PostMapping("/code-exception")
     public JSONObject codeException(HttpServletRequest request){
-        String baseUrl = "http://172.23.56.68/gatehub/rsdb_test-00001/api/datashare/share/api/RSDB_SDB_DTL_YLWS_SMYCSJXX_A_D_2/v1";
+        String baseUrl = "http://172.23.56.68/gatehub/rsdb_test-00001/api/datashare/share/api/RSDB_STB_DTL_YLWS_SMYCSJXX_A_D/v1";
         JSONObject jsonObject = JSONObject.parseObject(InterTest.getResponse(baseUrl,InterTest.readRequestStream(request)));
         return jsonObject;
     }
@@ -49,7 +49,7 @@ public class CityPoliceController {
     */
     @PostMapping("/NAT-exception")
     public JSONObject natException(HttpServletRequest request){
-        String baseUrl = "http://172.23.56.68/gatehub/rsdb_test-00001/api/datashare/share/api/RSDB_SDB_DTL_YLWS_PTHSYCSJXX_A_D/v1";
+        String baseUrl = "http://172.23.56.68/gatehub/rsdb_test-00001/api/datashare/share/api/RSDB_SDB_DTL_YLWS_PTHSYCSJXX_A_D_dameng/v1";
         JSONObject jsonObject = JSONObject.parseObject(InterTest.getResponse(baseUrl,InterTest.readRequestStream(request)));
         return jsonObject;
     }
@@ -62,7 +62,7 @@ public class CityPoliceController {
     */
     @PostMapping("/epidemic-prevention")
     public JSONObject epidemicPrevention(HttpServletRequest request){
-        String baseUrl = "http://172.23.56.68/gatehub/rsdb_test-00001/api/datashare/share/api/RSDB_STB_DTL_YLWS_YQFK_HSSJ_A_D_MYSQL/v1";
+        String baseUrl = "http://172.23.56.68/gatehub/rsdb_test-00001/api/datashare/share/api/RSDB_SDB_DTL_YLWS_YQFK_HSSJ_A_D/v1";
         JSONObject jsonObject = JSONObject.parseObject(InterTest.getResponse(baseUrl,InterTest.readRequestStream(request)));
         return jsonObject;
     }
@@ -196,7 +196,7 @@ public class CityPoliceController {
         List list = new ArrayList();
         String[] names = new String[]{"桃浦镇","真如镇街道","万里街道","长征镇","长风新村街道","曹杨新村街道","石泉路街道","甘泉路街道","长寿路街道","宜川路街道"};
         String[] coordxs = new String[]{"-10043.6097272015","-7327.3055928346","-6230.44013493727","-9016.28753766398","-6910.33404431796","-6097.87111489178","-4960.95897967728","-3838.06335208088","-3649.16488061092","-2908.1276238173"};
-        String[] coordys = new String[]{"5229.7854004824","2457.47684004453","33884.41824051588","330.878321080696","-715.135870138399","624.469965525916","2052.79421195499","3499.4091445041","891.6977221791","2484.4069334443"};
+        String[] coordys = new String[]{"5229.7854004824","2457.47684004453","3884.41824051588","330.878321080696","-715.135870138399","624.469965525916","2052.79421195499","3499.4091445041","891.6977221791","2484.4069334443"};
         int[] counts = new int[]{202446,162501,150681,140681,128663,103429,99045,105469,128891,93603};
         Double[] times = new Double[]{4.15,4.36,4.67,4.97,5.12,5.33,5.75,6.01,6.11,6.43};
         for(int i = 0; i < names.length; i++){
@@ -233,6 +233,20 @@ public class CityPoliceController {
     public JSONObject streetIntervalTime(HttpServletRequest request){
         String baseUrl = "http://172.23.56.68/gatehub/rsdb_test-00001/api/datashare/share/api/RSDB_SDB_DTL_YLWS_JZHSCSJGSJ_A_D/v1";
         JSONObject jsonObject = JSONObject.parseObject(InterTest.getResponse(baseUrl,InterTest.readRequestStream(request)));
+        return jsonObject;
+    }
+
+    @PostMapping("/NAT-count")
+    public JSONObject natCount(HttpServletRequest request){
+        String baseUrl = "http://172.23.56.68/gatehub/rsdb_test-00001/api/datashare/share/api/RSDB_SDB_STS_YLWS_BYHSCYSLBHQS_A_D/v1";
+        JSONObject jsonObject = JSONObject.parseObject(InterTest.getResponse(baseUrl,InterTest.readRequestStream(request)));
+        return jsonObject;
+    }
+
+    @PostMapping("/emergency-warning")
+    public JSONObject emergencyWarning(HttpServletRequest request){
+        String baseUrl = "http://172.23.56.68/gatehub/rsdb_test-00001/api/datashare/share/api/RSDB_SDB_DB_YJGL_YJSXXXB_D_A/v1";
+        JSONObject jsonObject = JSONObject.parseObject(InterTest.getResponse(baseUrl,""));
         return jsonObject;
     }
 }

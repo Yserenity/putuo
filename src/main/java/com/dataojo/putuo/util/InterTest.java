@@ -1,11 +1,20 @@
 package com.dataojo.putuo.util;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.dataojo.putuo.entity.HttpGetWithEntity;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
@@ -20,9 +29,15 @@ import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 public class InterTest {
 
-    //获取返回值
+    /**
+     * 城操数据组post请求
+     * @param baseUrl
+     * @param data
+     * @return
+     */
     public static String getResponse(String baseUrl,String data){
         String result = null;
         try {
@@ -32,7 +47,7 @@ public class InterTest {
             Map<String, String> queryMap = new HashMap();
             String _url = handleQuery(baseUrl, queryMap);
             URL url = new URL(_url);
-//            log.info("url: " + url);
+            log.info("url: " + url);
             HttpURLConnection httpConc = (HttpURLConnection) url.openConnection();
             httpConc.setConnectTimeout(60000);
             httpConc.setReadTimeout(300000);
@@ -50,7 +65,13 @@ public class InterTest {
         }
         return result;
     }
-    //消防请求
+
+    /**
+     * 无请求头get请求
+     * @param baseUrl
+     * @param queryMap
+     * @return
+     */
     public static String getResponseByGet(String baseUrl,Map<String, String> queryMap){
         String result = null;
         try {
@@ -62,6 +83,7 @@ public class InterTest {
             httpConc.setReadTimeout(300000);
             httpConc.setRequestMethod("GET");
             httpConc.setRequestProperty("accept", "*/*");
+            httpConc.setRequestProperty("Content-Type","application/json");
             httpConc.connect();
             result = readStreamToStr(httpConc);
 //            log.info("response =" + respsonse);
@@ -70,7 +92,14 @@ public class InterTest {
         }
         return result;
     }
-    //图层get请求
+
+    /**
+     * 地图-get请求
+     * @param baseUrl
+     * @param queryMap
+     * @param headers
+     * @return
+     */
     public static String getResponseByMap(String baseUrl,Map<String, String> queryMap,String headers){
         String result = null;
         try {
@@ -91,7 +120,14 @@ public class InterTest {
         }
         return result;
     }
-    //图层post请求
+
+    /**
+     * 地图-post请求
+     * @param baseUrl
+     * @param data
+     * @param headers
+     * @return
+     */
     public static String getResponseByMap(String baseUrl,String data,String headers){
         String result = null;
         try {
@@ -113,6 +149,7 @@ public class InterTest {
         }
         return result;
     }
+
     //处理url
     public static String handleQuery(String url, Map<String, String> quertMap) {
         StringBuilder sb = new StringBuilder(url);
@@ -181,12 +218,42 @@ public class InterTest {
         httpConc.setDoOutput(true);
         httpConc.connect();
         DataOutputStream out = new DataOutputStream(httpConc.getOutputStream());
-        out.write(data.getBytes(StandardCharsets.UTF_8));
+        if (data != null && !"".equals(data)){
+            out.write(data.getBytes(StandardCharsets.UTF_8));
+        }
         out.flush();
         out.close();
         String response = readStreamToStr(httpConc);
         return response;
     }
+
+    //传入body值
+    private static String deliveryBody(HttpURLConnection httpConc, String data) throws IOException {
+        httpConc.setDoOutput(true);
+        httpConc.connect();
+        DataOutputStream out = new DataOutputStream(httpConc.getOutputStream());
+//        List<Field> fields = new ArrayList<>() ;
+//        Class tempClass = conn.getClass();
+//        while (tempClass != null) {//当父类为null的时候说明到达了最上层的父类(Object类).
+//            fields.addAll(Arrays.asList(tempClass.getDeclaredFields()));
+//            tempClass = tempClass.getSuperclass(); //得到父类,然后赋给自己
+//        }
+//        for (Field field : fields) {
+//            if ("method".equals(field.getName())){
+//                field.setAccessible(true);
+//                field.set(conn,"GET");
+//            }
+//        }
+        if (data != null && !"".equals(data)){
+            out.write(data.getBytes(StandardCharsets.UTF_8));
+        }
+
+        out.flush();
+        out.close();
+        String response = readStreamToStr(httpConc);
+        return response;
+    }
+
     //SHA256转码
     private static String signature(String clientId, String clientSecret, long timestamp) throws NoSuchAlgorithmException {
         String strToSignature = String.format("%s&%s&%d", clientId, clientSecret, timestamp);
@@ -204,7 +271,12 @@ public class InterTest {
         return signature;
     }
 
-    //通用请求
+    /**
+     * 视频流post请求
+     * @param baseUrl
+     * @param data
+     * @return
+     */
     public static String post(String baseUrl,String data){
         String result = null;
         try{
@@ -221,7 +293,6 @@ public class InterTest {
             httpConc.setRequestProperty("client_ip", "31.1.227.85");
             String encryptedData = data;
             result = doPost(httpConc, encryptedData);
-            System.out.println(result);
             httpConc.disconnect();
         }catch (Exception e){
             e.printStackTrace();
@@ -249,19 +320,169 @@ public class InterTest {
         return data;
     }
 
-    public static String get(String baseUrl,Map<String, String> queryMap){
+    /**
+     * 鉴权post请求
+     * @param baseUrl
+     * @param queryMap
+     * @return
+     */
+    public static String identityByGet(String baseUrl,Map<String, String> queryMap){
+        String result = null;
+        try {
+            String clientId = "633291c2e4b0463194b04c73";
+            String clientSecret = "PE4f4IoYbphN21zPhL4HdLu7rXRO8qf7q9Rx5leDpuQ";
+            String secretKey = "";
+            String _url = handleQuery(baseUrl, queryMap);
+            URL url = new URL(_url);
+//            log.info("url: " + url);
+            HttpURLConnection httpConc = (HttpURLConnection) url.openConnection();
+            httpConc.setConnectTimeout(60000);
+            httpConc.setReadTimeout(300000);
+            httpConc.setRequestProperty("Content-Type", "application/json");
+            httpConc.setRequestProperty("authType", "ClientAuth");
+            httpConc.setRequestProperty("appId", "633291c2e4b0463194b04c73");
+            long timestamp = System.currentTimeMillis();
+            httpConc.setRequestProperty("timestamp", String.valueOf(timestamp));
+            httpConc.setRequestProperty("signature", signature(clientId, clientSecret, timestamp));
+            result = readStreamToStr(httpConc);
+//            log.info("response =" + respsonse);
+            httpConc.disconnect();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    /**
+     * 参数中存在中文字符get请求
+     * @param baseUrl
+     * @param queryMap
+     * @return
+     */
+    public static String chineseByGet(String baseUrl,Map<String, String> queryMap){
         String result = null;
         try{
             String url = handleQuery(baseUrl, queryMap);
             CloseableHttpClient closeableHttpClient = HttpClients.createDefault();
             HttpGet httpGet = new HttpGet(url);
-            httpGet.setHeader("cd-token","IPhj81.qyUqPr.wWJDx6");
             HttpResponse httpResponse = closeableHttpClient.execute(httpGet);
             result = readStreamToStrGet(httpResponse);
         }catch (Exception e){
             e.printStackTrace();
         }
-
         return result;
     }
+
+    /**
+     * 明珠POST请求
+     */
+    public static String getResponseByMingzhu(String baseUrl,String data){
+        String result = null;
+        try {
+            URL url = new URL(baseUrl);
+//            log.info("url: " + url);
+            HttpURLConnection httpConc = (HttpURLConnection) url.openConnection();
+            httpConc.setConnectTimeout(60000);
+            httpConc.setReadTimeout(300000);
+            httpConc.setRequestProperty("Content-Type", "application/json");
+            httpConc.setRequestProperty("n", "mingzhu");
+            long timestamp = System.currentTimeMillis();
+            httpConc.setRequestProperty("r", String.valueOf(timestamp));
+            httpConc.setRequestProperty("k", Transition.getPK());
+            String encryptedData = data;
+            result = doPost(httpConc, encryptedData);
+//            log.info("response =" + respsonse);
+            httpConc.disconnect();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    /**
+     * 智搜POST请求
+     */
+    public static String getResponseByZhiSou(String baseUrl,String data){
+        String result = null;
+        try {
+            URL url = new URL(baseUrl);
+//            log.info("url: " + url);
+            HttpURLConnection httpConc = (HttpURLConnection) url.openConnection();
+            httpConc.setConnectTimeout(60000);
+            httpConc.setReadTimeout(300000);
+            httpConc.setRequestProperty("Content-Type", "application/json");
+            httpConc.setRequestProperty("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyVHlwZSI6MSwiand0VHlwZSI6InVzZXIiLCJ1c2VySWQiOiI0MyIsInRlbmFudElkIjoiMSIsInVzZXJuYW1lIjoieGlhbmdzaHUiLCJzZXNzaW9uVG9rZW4iOiJhNTI4NmM0ZDI4ZGI0YTAyODVjNGFkZmE3YWU4MmQ0ZCIsImlzcyI6ImRyaWdodCIsInN1YiI6ImFjY2Vzc1Rva2VuIiwiaWF0IjoxNjcyMDQwMzUzLCJuYmYiOjE2NzIwNDAyOTN9.potNjH2teHyTjFHIZWTXh7MBSScgUbZwmcvSqmPPsRs");
+            String encryptedData = data;
+            result = doPost(httpConc, encryptedData);
+//            log.info("response =" + respsonse);
+            httpConc.disconnect();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    /**
+     * 智搜-get请求
+     * @param baseUrl
+     * @param queryMap
+     * @return
+     */
+    public static String getResponseByZhiSouGet(String baseUrl,Map<String, String> queryMap){
+        String result = null;
+        try {
+            String _url = handleQuery(baseUrl, queryMap);
+            URL url = new URL(_url);
+//            log.info("url: " + url);
+            HttpURLConnection httpConc = (HttpURLConnection) url.openConnection();
+            httpConc.setConnectTimeout(60000);
+            httpConc.setReadTimeout(300000);
+            httpConc.setRequestMethod("GET");
+            httpConc.setRequestProperty("accept", "*/*");
+            httpConc.setRequestProperty("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyVHlwZSI6MSwiand0VHlwZSI6InVzZXIiLCJ1c2VySWQiOiI0MyIsInRlbmFudElkIjoiMSIsInVzZXJuYW1lIjoieGlhbmdzaHUiLCJzZXNzaW9uVG9rZW4iOiJhNTI4NmM0ZDI4ZGI0YTAyODVjNGFkZmE3YWU4MmQ0ZCIsImlzcyI6ImRyaWdodCIsInN1YiI6ImFjY2Vzc1Rva2VuIiwiaWF0IjoxNjcyMDQwMzUzLCJuYmYiOjE2NzIwNDAyOTN9.potNjH2teHyTjFHIZWTXh7MBSScgUbZwmcvSqmPPsRs");
+            httpConc.connect();
+            result = readStreamToStr(httpConc);
+//            log.info("response =" + respsonse);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    /**
+     * 智搜GET请求
+     */
+    /**
+     * 发送get请求，参数为json
+     * @param url
+     * @param param 参数
+     * @return
+     * @throws Exception
+     */
+    public static JSONObject sendJsonByGetReq(String url, String param){
+        try {
+            String encoding = "UTF-8";
+            String body = "";
+            //创建httpclient对象
+            HttpGetWithEntity httpGetWithEntity = new HttpGetWithEntity(url);
+            HttpEntity httpEntity = new StringEntity(param, ContentType.APPLICATION_JSON);
+            httpGetWithEntity.setEntity(httpEntity);
+            //执行请求操作，并拿到结果（同步阻塞）
+            CloseableHttpClient client = HttpClientBuilder.create().build();
+            CloseableHttpResponse response = client.execute(httpGetWithEntity);
+            //获取结果实体
+            HttpEntity entity = response.getEntity();
+            if (entity != null) {
+                //按指定编码转换结果实体为String类型
+                body = EntityUtils.toString(entity, encoding);
+            }
+            //释放链接
+            response.close();
+            return JSONObject.parseObject(body);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

@@ -1,2 +1,11 @@
 server:
   port: 8282
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://123.57.89.151:30072/xxl_job
+    username: root
+    password: aliyun@2022
+
+

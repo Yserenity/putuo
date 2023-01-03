@@ -19,7 +19,43 @@ public class CityVienController {
     */
     @PostMapping
     public JSONObject cityVien(HttpServletRequest request){
-        String baseUrl = "http://172.23.56.68/gatehub/rsdb_test-00001/api/datashare/share/api/RSDB_TDB_DTL_TSZL_CYZP_JTSJ_A_D_R_1/v1";
+        String baseUrl = "http://172.23.56.68/gatehub/rsdb_test-00001/api/datashare/share/api/RSDB_SDB_DTL_JTYS_CSZM_A_D/v1";
+        JSONObject jsonObject = JSONObject.parseObject(InterTest.getResponse(baseUrl,InterTest.readRequestStream(request)));
+        return jsonObject;
+    }
+
+    /**
+     * 拥堵道路top3
+     * @param request
+     * @return
+     */
+    @PostMapping("/congested-roads-TOP3")
+    public JSONObject congestedRoadsTOP3(HttpServletRequest request){
+        String baseUrl = "http://172.23.56.68/gatehub/rsdb_test-00001/api/datashare/share/api/RSDB_SDB_STS_JTYS_YDDLTOP3_A_D/v1";
+        JSONObject jsonObject = JSONObject.parseObject(InterTest.getResponse(baseUrl,InterTest.readRequestStream(request)));
+        return jsonObject;
+    }
+
+    /**
+     * 共享单车密度TOP3
+     * @param request
+     * @return
+     */
+    @PostMapping("/bike-sharing-TOP3")
+    public JSONObject bikeSharingTOP3(HttpServletRequest request){
+        String baseUrl = "http://172.23.56.68/gatehub/rsdb_test-00001/api/datashare/share/api/RSDB_SDB_DB_JTJ_HIST_BIKE_STATION_GD_A_D/v1";
+        JSONObject jsonObject = JSONObject.parseObject(InterTest.getResponse(baseUrl,InterTest.readRequestStream(request)));
+        return jsonObject;
+    }
+
+    /**
+     * 进出站人数TOP3
+     * @param request
+     * @return
+     */
+    @PostMapping("/arrivals-number-TOP3")
+    public JSONObject arrivalsNumberTOP3(HttpServletRequest request){
+        String baseUrl = "http://172.23.56.68/gatehub/rsdb_test-00001/api/datashare/share/api/RSDB_SDB_DB_JTYS_HIST_RAILSTATION_FLOW_BYDAY_A_D/v1";
         JSONObject jsonObject = JSONObject.parseObject(InterTest.getResponse(baseUrl,InterTest.readRequestStream(request)));
         return jsonObject;
     }

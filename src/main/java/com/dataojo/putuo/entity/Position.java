@@ -2,6 +2,9 @@ package com.dataojo.putuo.entity;
 
 import lombok.Data;
 
+/**
+ *
+ */
 @Data
 public class Position {
     private String address;
