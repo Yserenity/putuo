@@ -7,12 +7,10 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-public class PutuoApplication extends SpringBootServletInitializer {
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-        return builder.sources(PutuoApplication.class);
-    }
+public class PutuoApplication {
+
     public static void main(String[] args) {
         SpringApplication.run(PutuoApplication.class, args);
     }
+
 }
