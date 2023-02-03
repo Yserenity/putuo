@@ -29,7 +29,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 
-@Slf4j
 public class InterTest {
 
     /**
@@ -47,7 +46,7 @@ public class InterTest {
             Map<String, String> queryMap = new HashMap();
             String _url = handleQuery(baseUrl, queryMap);
             URL url = new URL(_url);
-            log.info("url: " + url);
+//            log.info("url: " + url);
             HttpURLConnection httpConc = (HttpURLConnection) url.openConnection();
             httpConc.setConnectTimeout(60000);
             httpConc.setReadTimeout(300000);
@@ -411,7 +410,7 @@ public class InterTest {
             httpConc.setConnectTimeout(60000);
             httpConc.setReadTimeout(300000);
             httpConc.setRequestProperty("Content-Type", "application/json");
-            httpConc.setRequestProperty("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyVHlwZSI6MSwiand0VHlwZSI6InVzZXIiLCJ1c2VySWQiOiI0MyIsInRlbmFudElkIjoiMSIsInVzZXJuYW1lIjoieGlhbmdzaHUiLCJzZXNzaW9uVG9rZW4iOiJhNTI4NmM0ZDI4ZGI0YTAyODVjNGFkZmE3YWU4MmQ0ZCIsImlzcyI6ImRyaWdodCIsInN1YiI6ImFjY2Vzc1Rva2VuIiwiaWF0IjoxNjcyMDQwMzUzLCJuYmYiOjE2NzIwNDAyOTN9.potNjH2teHyTjFHIZWTXh7MBSScgUbZwmcvSqmPPsRs");
+            httpConc.setRequestProperty("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyVHlwZSI6MSwiand0VHlwZSI6InVzZXIiLCJ1c2VySWQiOiI0MiIsInRlbmFudElkIjoiMSIsInVzZXJuYW1lIjoicHV0dW9CcmFpbiIsInNlc3Npb25Ub2tlbiI6IjljZWQ2YzQ5Njg5ZDRlMmQ4MDBiYzdhZmRhZDU2MTE2IiwiaXNzIjoiZHJpZ2h0Iiwic3ViIjoiYWNjZXNzVG9rZW4iLCJpYXQiOjE2NzUwNDg1MjYsIm5iZiI6MTY3NTA0ODQ2Nn0.ZQaE6flsPyLj2StwK6St58UZFQwuIQGt2mDFEVENX5o");
             String encryptedData = data;
             result = doPost(httpConc, encryptedData);
 //            log.info("response =" + respsonse);
@@ -439,7 +438,7 @@ public class InterTest {
             httpConc.setReadTimeout(300000);
             httpConc.setRequestMethod("GET");
             httpConc.setRequestProperty("accept", "*/*");
-            httpConc.setRequestProperty("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyVHlwZSI6MSwiand0VHlwZSI6InVzZXIiLCJ1c2VySWQiOiI0MyIsInRlbmFudElkIjoiMSIsInVzZXJuYW1lIjoieGlhbmdzaHUiLCJzZXNzaW9uVG9rZW4iOiJhNTI4NmM0ZDI4ZGI0YTAyODVjNGFkZmE3YWU4MmQ0ZCIsImlzcyI6ImRyaWdodCIsInN1YiI6ImFjY2Vzc1Rva2VuIiwiaWF0IjoxNjcyMDQwMzUzLCJuYmYiOjE2NzIwNDAyOTN9.potNjH2teHyTjFHIZWTXh7MBSScgUbZwmcvSqmPPsRs");
+            httpConc.setRequestProperty("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyVHlwZSI6MSwiand0VHlwZSI6InVzZXIiLCJ1c2VySWQiOiI0MiIsInRlbmFudElkIjoiMSIsInVzZXJuYW1lIjoicHV0dW9CcmFpbiIsInNlc3Npb25Ub2tlbiI6IjljZWQ2YzQ5Njg5ZDRlMmQ4MDBiYzdhZmRhZDU2MTE2IiwiaXNzIjoiZHJpZ2h0Iiwic3ViIjoiYWNjZXNzVG9rZW4iLCJpYXQiOjE2NzUwNDg1MjYsIm5iZiI6MTY3NTA0ODQ2Nn0.ZQaE6flsPyLj2StwK6St58UZFQwuIQGt2mDFEVENX5o");
             httpConc.connect();
             result = readStreamToStr(httpConc);
 //            log.info("response =" + respsonse);

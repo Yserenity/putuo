@@ -3,6 +3,7 @@ package com.dataojo.putuo.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.dataojo.putuo.util.InterTest;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -47,4 +48,6 @@ public class CityAppearanceController {
         JSONObject jsonObject = JSONObject.parseObject(InterTest.getResponse(baseUrl,InterTest.readRequestStream(request)));
         return jsonObject;
     }
+
+
 }

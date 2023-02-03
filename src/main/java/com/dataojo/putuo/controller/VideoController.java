@@ -5,15 +5,15 @@ import com.alibaba.fastjson.JSONObject;
 import com.dataojo.putuo.common.Result;
 import com.dataojo.putuo.util.InterTest;
 import org.apache.el.parser.JJTELParserState;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/video")
@@ -294,11 +294,27 @@ public class VideoController {
     }
 
     @PostMapping("/video-around")
-    public JSONObject videoAround(HttpServletRequest request){
+    public Result videoAround(@RequestBody JSONObject jsonObject){
         String baseUrl = "http://158.10.0.222/wk/proxy/CoordReverse/mapTransform/hitLayerByXY";
-        String data = InterTest.readRequestStream(request);
-        JSONObject jsonObject = JSONObject.parseObject(InterTest.getResponseByMap(baseUrl,data,"o7KvLA.YlN9UX.WvQLzf"));
-        return jsonObject;
+        int count = 0;
+        List list = new ArrayList();
+        //遍历多个变量
+
+        if (jsonObject.getJSONArray("layerName").size() != 1){
+            List layerNameList = jsonObject.getJSONArray("layerName").stream().collect(Collectors.toList());
+            //多次请求
+            for (Object layerName : layerNameList){
+                jsonObject.replace("layerName",layerName.toString());
+                JSONObject jsonResult = JSONObject.parseObject(InterTest.getResponseByMap(baseUrl,jsonObject.toJSONString(),"o7KvLA.YlN9UX.WvQLzf")).getJSONObject("data");
+                //获取总值
+                count += jsonResult.getInteger("count");
+                System.out.println(jsonResult.getInteger("count"));
+                list.addAll(jsonResult.getJSONArray("result").stream().collect(Collectors.toList()));
+                System.out.println(jsonResult.getJSONArray("result").size());
+            }
+        }// todo 只有一种图层的可能性需要考虑
+        String resultCount = String.valueOf(count);
+        return Result.OK(resultCount,list);
     }
 
     @PostMapping("/get-grid-info")

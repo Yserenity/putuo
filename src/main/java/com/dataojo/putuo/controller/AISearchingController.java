@@ -85,10 +85,10 @@ public class AISearchingController {
     * @Author: hui
     * @Date: 2022/12/27
     */
-    @GetMapping("/module-search")
-    public JSONObject moduleSearch(@RequestBody JSONObject jsonObject,HttpServletRequest request){
+    @PostMapping("/module-search")
+    public JSONObject moduleSearch(@RequestBody JSONObject jsonObject){
         String body = jsonObject.toJSONString();
-        String code = request.getParameter("moduleCode");
+        String code = jsonObject.getString("moduleCode");
         String type = null;
         if ("1".equals(code)){
             type = "m_event";
@@ -113,5 +113,33 @@ public class AISearchingController {
         String baseUrl = "http://172.23.56.68/api/cityos/cityos-unidom-search/v1/mapxysearch/knnSearch";
         String body = jsonObject.toJSONString();
         return JSONObject.parseObject(InterTest.getResponseByZhiSou(baseUrl,body));
+    }
+
+    /**
+    * @Description: 地图空间分析搜索
+    * @Param:
+    * @return:
+    * @Author: hui
+    * @Date: 2023/1/5
+    */
+    @PostMapping("/map-spatial-analysis-search")
+    public JSONObject mapSpatialAnalysisSearch(@RequestBody JSONObject jsonObject){
+        String baseUrl = "http://172.23.56.68/api/cityos/cityos-unidom-search/v1/mapxysearch/polygonSearch";
+        String body = jsonObject.toJSONString();
+        return JSONObject.parseObject(InterTest.getResponseByZhiSou(baseUrl,body));
+    }
+
+    /** 
+    * @Description: 模块列表
+    * @Param: 
+    * @return: 
+    * @Author: hui
+    * @Date: 2023/1/5
+    */
+    @GetMapping("module-list")
+    public JSONObject moduleList(HttpServletRequest request){
+        String baseUrl = "http://172.23.56.68/api/cityos/cityos-unidom-search/v1/mapxysearch/mapModuleDefList";
+        Map<String, String> queryMap = new HashMap();
+        return JSONObject.parseObject(InterTest.getResponseByZhiSouGet(baseUrl,queryMap));
     }
 }

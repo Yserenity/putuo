@@ -5,6 +5,7 @@ import com.dataojo.putuo.common.Result;
 import com.dataojo.putuo.entity.StreetNATCount;
 import com.dataojo.putuo.util.InterTest;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -171,10 +172,9 @@ public class CityPoliceController {
      * @date: 2022/10/26 14:04
      */
     @PostMapping("/order-detail")
-    public JSONObject orderDetail(HttpServletRequest request){
+    public JSONObject orderDetail(@RequestBody JSONObject jsonObject){
         String baseUrl = "http://172.23.56.68/gatehub/rsdb_test-00001/api/datashare/share/api/RSDB_SDB_DTL_ZWFW_DM_CSZP_GDMXSJ_A_D/v1";
-        JSONObject jsonObject = JSONObject.parseObject(InterTest.getResponse(baseUrl,InterTest.readRequestStream(request)));
-        return jsonObject;
+        return JSONObject.parseObject(InterTest.getResponse(baseUrl,jsonObject.toJSONString()));
     }
 
     /**
@@ -243,10 +243,36 @@ public class CityPoliceController {
         return jsonObject;
     }
 
+    /** 
+    * @Description: 应急预警
+    * @Param: 
+    * @return: 
+    * @Author: hui
+    * @Date: 2023/1/29
+    */
     @PostMapping("/emergency-warning")
     public JSONObject emergencyWarning(HttpServletRequest request){
         String baseUrl = "http://172.23.56.68/gatehub/rsdb_test-00001/api/datashare/share/api/RSDB_SDB_DB_YJGL_YJSXXXB_D_A/v1";
         JSONObject jsonObject = JSONObject.parseObject(InterTest.getResponse(baseUrl,""));
         return jsonObject;
+    }
+
+    /**
+     * @Description: 天气预警
+     * @Param:
+     * @return:
+     * @Author: hui
+     * @Date: 2023/1/29
+     */
+    @PostMapping("/weather-warning")
+    public JSONObject weatherWarning(@RequestBody JSONObject jsonObject){
+        String baseUrl = "http://172.23.56.68/gatehub/rsdb_test-00001/api/datashare/share/api/RSDB_SDB_DTL_QXSW_TQYJXX_A_D/v1";
+        JSONObject jsonObject1 = JSONObject.parseObject(InterTest.getResponse(baseUrl,jsonObject.toJSONString()));
+        if (jsonObject1.getJSONArray("data").size() > 0){
+            jsonObject1.put("imageUrl","/picture/weather/" + jsonObject1.getJSONArray("data").getJSONObject(0).getString("YJMC").substring(0,3) +"@2x.png");
+            return jsonObject1;
+        }else{
+            return JSONObject.parseObject("当天无数据");
+        }
     }
 }

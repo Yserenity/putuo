@@ -1,11 +1,11 @@
 package com.dataojo.putuo.util;
 
 import com.dataojo.putuo.entity.Gps;
-import lombok.extern.slf4j.Slf4j;
+
 
 import java.math.BigDecimal;
 
-@Slf4j
+
 public class PositionUtils {
     public static double PI = 3.1415926535897932384626;
     public static double a = 6378245.0;

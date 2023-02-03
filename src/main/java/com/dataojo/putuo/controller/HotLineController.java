@@ -47,7 +47,7 @@ public class HotLineController {
      */
     @PostMapping("/order-acceptance-tendency-hour-day")
     public JSONObject orderAcceptanceTendencyHourDay(HttpServletRequest request){
-        String baseUrl = " http://172.23.56.68/gatehub/rsdb_test-00001/api/datashare/share/api/RSDB_SDB_STS_CSFW_RGDSLQS_A_D/v1";
+        String baseUrl = "http://172.23.56.68/gatehub/rsdb_test-00001/api/datashare/share/api/RSDB_SDB_STS_CSFW_RGDSLQS_A_D/v1";
         return JSONObject.parseObject(InterTest.getResponse(baseUrl,InterTest.readRequestStream(request)));
     }
 
