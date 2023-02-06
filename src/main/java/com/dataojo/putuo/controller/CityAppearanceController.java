@@ -31,10 +31,9 @@ public class CityAppearanceController {
     * @date: 2022/10/26 13:58
     */
     @PostMapping("/street-down")
-    public JSONObject streetDown(HttpServletRequest request){
-        String baseUrl = "http://172.23.56.68/gatehub/rsdb_test-00001/api/datashare/share/api/TDB_DTL_TSZL_CYZP_JTSJ_A_D_1/v1";
-        JSONObject jsonObject = JSONObject.parseObject(InterTest.getResponse(baseUrl,InterTest.readRequestStream(request)));
-        return jsonObject;
+    public JSONObject streetDown(@RequestBody JSONObject jsonObject){
+        String baseUrl = "http://172.23.56.68/gatehub/rsdb_test-00001/api/datashare/share/api/SDB_DTL_CSFW_CYZP_JTSJ_A_D_2/v1";
+        return JSONObject.parseObject(InterTest.getResponse(baseUrl,jsonObject.toJSONString()));
     }
     /**
     * @program:
@@ -43,10 +42,9 @@ public class CityAppearanceController {
     * @date: 2022/10/26 14:02
     */
     @PostMapping("/area-population")
-    public JSONObject areaPopulation(HttpServletRequest request){
-        String baseUrl = "http://172.23.56.68/gatehub/rsdb_test-00001/api/datashare/share/api/TDB_DTL_TSZL_CYZP_JTSJ_A_D/v1";
-        JSONObject jsonObject = JSONObject.parseObject(InterTest.getResponse(baseUrl,InterTest.readRequestStream(request)));
-        return jsonObject;
+    public JSONObject areaPopulation(@RequestBody JSONObject jsonObject){
+        String baseUrl = "http://172.23.56.68/gatehub/rsdb_test-00001/api/datashare/share/api/SDB_DTL_CSFW_CYZP_JTSJ_A_D/v1";
+        return JSONObject.parseObject(InterTest.getResponse(baseUrl,jsonObject.toJSONString()));
     }
 
 
