@@ -31,6 +31,68 @@ import java.util.Map;
 
 public class InterTest {
 
+    //处理url
+    public static String handleQuery(String url, Map<String, String> quertMap) {
+        StringBuilder sb = new StringBuilder(url);
+        boolean firstQuery = true;
+        for (String key : quertMap.keySet()) {
+            if (firstQuery) {
+                sb.append("?");
+                firstQuery = false;
+            } else {
+                sb.append("&");
+            }
+            String val = quertMap.get(key);
+            sb.append(key).append("=").append(val == null ? "" : val);
+        }
+        return sb.toString();
+    }
+
+    //流转字符串
+    private static String readStreamToStr(HttpURLConnection httpConc){
+        try{
+            int responseCode = httpConc.getResponseCode();
+//            log.info("responseCode = " + responseCode);
+            BufferedReader reader = null;
+            if(responseCode == 200){
+                reader = new BufferedReader(new InputStreamReader(httpConc.getInputStream()));
+            }else{
+                reader = new BufferedReader(new InputStreamReader(httpConc.getErrorStream()));
+            }
+            StringBuilder sb = new StringBuilder(); String lines;
+            while((lines = reader.readLine()) != null){
+                sb.append(lines);
+            }
+            String resStr = sb.toString();
+            return resStr;
+        }catch(Exception e){
+            e.printStackTrace(); return null;
+        }
+    }
+
+    //流转字符串
+    private static String readStreamToStrGet(HttpResponse response){
+        try{
+            int responseCode = response.getStatusLine().getStatusCode();
+            // 获取响应消息实体
+            HttpEntity httpEntity = response.getEntity();
+//            log.info("responseCode = " + responseCode);
+            BufferedReader reader = null;
+            if(responseCode == 200){
+                reader = new BufferedReader(new InputStreamReader(httpEntity.getContent()));
+            }else{
+                reader = new BufferedReader(new InputStreamReader(httpEntity.getContent()));
+            }
+            StringBuilder sb = new StringBuilder(); String lines;
+            while((lines = reader.readLine()) != null){
+                sb.append(lines);
+            }
+            String resStr = sb.toString();
+            return resStr;
+        }catch(Exception e){
+            e.printStackTrace(); return null;
+        }
+    }
     /**
      * 城操数据组post请求
      * @param baseUrl
@@ -149,68 +211,7 @@ public class InterTest {
         return result;
     }
 
-    //处理url
-    public static String handleQuery(String url, Map<String, String> quertMap) {
-        StringBuilder sb = new StringBuilder(url);
-        boolean firstQuery = true;
-        for (String key : quertMap.keySet()) {
-            if (firstQuery) {
-                sb.append("?");
-                firstQuery = false;
-            } else {
-                sb.append("&");
-            }
-            String val = quertMap.get(key);
-            sb.append(key).append("=").append(val == null ? "" : val);
-        }
-        return sb.toString();
-    }
 
-    //流转字符串
-    private static String readStreamToStr(HttpURLConnection httpConc){
-        try{
-            int responseCode = httpConc.getResponseCode();
-//            log.info("responseCode = " + responseCode);
-            BufferedReader reader = null;
-            if(responseCode == 200){
-                reader = new BufferedReader(new InputStreamReader(httpConc.getInputStream()));
-            }else{
-                reader = new BufferedReader(new InputStreamReader(httpConc.getErrorStream()));
-            }
-            StringBuilder sb = new StringBuilder(); String lines;
-            while((lines = reader.readLine()) != null){
-                sb.append(lines);
-            }
-            String resStr = sb.toString();
-            return resStr;
-        }catch(Exception e){
-            e.printStackTrace(); return null;
-        }
-    }
-
-    //流转字符串
-    private static String readStreamToStrGet(HttpResponse response){
-        try{
-            int responseCode = response.getStatusLine().getStatusCode();
-            // 获取响应消息实体
-            HttpEntity httpEntity = response.getEntity();
-//            log.info("responseCode = " + responseCode);
-            BufferedReader reader = null;
-            if(responseCode == 200){
-                reader = new BufferedReader(new InputStreamReader(httpEntity.getContent()));
-            }else{
-                reader = new BufferedReader(new InputStreamReader(httpEntity.getContent()));
-            }
-            StringBuilder sb = new StringBuilder(); String lines;
-            while((lines = reader.readLine()) != null){
-                sb.append(lines);
-            }
-            String resStr = sb.toString();
-            return resStr;
-        }catch(Exception e){
-            e.printStackTrace(); return null;
-        }
-    }
     //发送POST请求
     private static String doPost(HttpURLConnection httpConc, String data) throws IOException {
         httpConc.setRequestMethod("POST");

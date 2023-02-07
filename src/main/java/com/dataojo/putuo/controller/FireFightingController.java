@@ -32,8 +32,7 @@ public class FireFightingController {
         if (request.getParameter("endTime") != null){
             queryMap.put("endTime",request.getParameter("endTime"));
         }
-        JSONObject jsonObject = JSONObject.parseObject(InterTest.getResponseByGet(baseUrl,queryMap));
-        return jsonObject;
+        return JSONObject.parseObject(InterTest.getResponseByGet(baseUrl,queryMap));
     }
 
     /**
@@ -49,8 +48,7 @@ public class FireFightingController {
         if (request.getParameter("street") != null){
             queryMap.put("street",request.getParameter("street"));
         }
-        JSONObject jsonObject = JSONObject.parseObject(InterTest.getResponseByGet(baseUrl,queryMap));
-        return jsonObject;
+        return JSONObject.parseObject(InterTest.getResponseByGet(baseUrl,queryMap));
     }
 
     /**
@@ -63,8 +61,14 @@ public class FireFightingController {
     public JSONObject policeInfoOverview(HttpServletRequest request){
         String baseUrl = "http://10.208.75.21:9002/xfService/alarm/getAlarmEntry";
         Map<String, String> queryMap = new HashMap();
-        JSONObject jsonObject = JSONObject.parseObject(InterTest.getResponseByGet(baseUrl,queryMap));
-        return jsonObject;
+        if(!"".equals(request.getParameter("startTime"))){
+            queryMap.put("startTime",request.getParameter("startTime"));
+        }
+        if(!"".equals(request.getParameter("endTime"))){
+            queryMap.put("endTime",request.getParameter("endTime"));
+        }
+        //因为param的编码和格式问题，需要使用HttpClients的请求，而不能使用HttpURLConnection的请求
+        return JSONObject.parseObject(InterTest.chineseByGet(baseUrl,queryMap));
     }
 
     /**
