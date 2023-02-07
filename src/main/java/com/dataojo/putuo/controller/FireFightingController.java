@@ -68,7 +68,8 @@ public class FireFightingController {
             queryMap.put("endTime",request.getParameter("endTime"));
         }
         //因为param的编码和格式问题，需要使用HttpClients的请求，而不能使用HttpURLConnection的请求
-        return JSONObject.parseObject(InterTest.chineseByGet(baseUrl,queryMap));
+        JSONObject jsonObject = JSONObject.parseObject(InterTest.chineseByGet(baseUrl,queryMap));
+        return jsonObject;
     }
 
     /**

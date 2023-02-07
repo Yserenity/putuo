@@ -23,16 +23,21 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class InterTest {
 
+
+
     //处理url
-    public static String handleQuery(String url, Map<String, String> quertMap) {
+    public static String handleQuery(String url, Map<String, String> quertMap) throws Exception{
         StringBuilder sb = new StringBuilder(url);
         boolean firstQuery = true;
         for (String key : quertMap.keySet()) {
@@ -45,7 +50,15 @@ public class InterTest {
             String val = quertMap.get(key);
             sb.append(key).append("=").append(val == null ? "" : val);
         }
-        return sb.toString();
+        String regEx = "[|{}\\[\\]()\\s]";
+        Pattern p = Pattern.compile(regEx);
+        Matcher m = p.matcher(sb);
+        StringBuffer sb2 = new StringBuffer();
+        while (m.find()) {
+            m.appendReplacement(sb2, URLEncoder.encode(m.group(), "UTF-8"));
+        }
+        m.appendTail(sb2);
+        return sb2.toString();
     }
 
     //流转字符串
@@ -363,6 +376,7 @@ public class InterTest {
         String result = null;
         try{
             String url = handleQuery(baseUrl, queryMap);
+//            URLEncoder.encode(url,"UTF-8");
             CloseableHttpClient closeableHttpClient = HttpClients.createDefault();
             HttpGet httpGet = new HttpGet(url);
             HttpResponse httpResponse = closeableHttpClient.execute(httpGet);
