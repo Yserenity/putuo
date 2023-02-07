@@ -173,7 +173,7 @@ public class CityPoliceController {
      */
     @PostMapping("/order-detail")
     public JSONObject orderDetail(@RequestBody JSONObject jsonObject){
-        String baseUrl = "http://172.23.56.68/gatehub/rsdb_test-00001/api/datashare/share/api/RSDB_SDB_DTL_ZWFW_DM_CSZP_GDMXSJ_A_D/v1";
+        String baseUrl = "http://172.23.56.68/gatehub/debug/rsdb_test-00001/api/datashare/share/api/RSDB_SDB_DTL_ZWFW_DM_CSZP_GDMXSJ_A_D/v1";
         return JSONObject.parseObject(InterTest.getResponse(baseUrl,jsonObject.toJSONString()));
     }
 
