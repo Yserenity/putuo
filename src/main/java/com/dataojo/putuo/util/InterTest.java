@@ -2,6 +2,7 @@ package com.dataojo.putuo.util;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.dataojo.putuo.controller.IdentityAuthenticationController;
 import com.dataojo.putuo.entity.HttpGetWithEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpEntity;
@@ -425,7 +426,7 @@ public class InterTest {
             httpConc.setConnectTimeout(60000);
             httpConc.setReadTimeout(300000);
             httpConc.setRequestProperty("Content-Type", "application/json");
-            httpConc.setRequestProperty("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyVHlwZSI6MSwiand0VHlwZSI6InVzZXIiLCJ1c2VySWQiOiI0MiIsInRlbmFudElkIjoiMSIsInVzZXJuYW1lIjoicHV0dW9CcmFpbiIsInNlc3Npb25Ub2tlbiI6IjljZWQ2YzQ5Njg5ZDRlMmQ4MDBiYzdhZmRhZDU2MTE2IiwiaXNzIjoiZHJpZ2h0Iiwic3ViIjoiYWNjZXNzVG9rZW4iLCJpYXQiOjE2NzUwNDg1MjYsIm5iZiI6MTY3NTA0ODQ2Nn0.ZQaE6flsPyLj2StwK6St58UZFQwuIQGt2mDFEVENX5o");
+            httpConc.setRequestProperty("Authorization", "Bearer " + IdentityAuthenticationController.token);
             String encryptedData = data;
             result = doPost(httpConc, encryptedData);
 //            log.info("response =" + respsonse);
@@ -453,7 +454,7 @@ public class InterTest {
             httpConc.setReadTimeout(300000);
             httpConc.setRequestMethod("GET");
             httpConc.setRequestProperty("accept", "*/*");
-            httpConc.setRequestProperty("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyVHlwZSI6MSwiand0VHlwZSI6InVzZXIiLCJ1c2VySWQiOiI0MiIsInRlbmFudElkIjoiMSIsInVzZXJuYW1lIjoicHV0dW9CcmFpbiIsInNlc3Npb25Ub2tlbiI6IjljZWQ2YzQ5Njg5ZDRlMmQ4MDBiYzdhZmRhZDU2MTE2IiwiaXNzIjoiZHJpZ2h0Iiwic3ViIjoiYWNjZXNzVG9rZW4iLCJpYXQiOjE2NzUwNDg1MjYsIm5iZiI6MTY3NTA0ODQ2Nn0.ZQaE6flsPyLj2StwK6St58UZFQwuIQGt2mDFEVENX5o");
+            httpConc.setRequestProperty("Authorization", "Bearer " + IdentityAuthenticationController.token);
             httpConc.connect();
             result = readStreamToStr(httpConc);
 //            log.info("response =" + respsonse);
