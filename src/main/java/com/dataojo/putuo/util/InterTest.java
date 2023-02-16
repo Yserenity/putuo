@@ -427,6 +427,8 @@ public class InterTest {
             httpConc.setReadTimeout(300000);
             httpConc.setRequestProperty("Content-Type", "application/json");
             httpConc.setRequestProperty("Authorization", "Bearer " + IdentityAuthenticationController.token);
+            System.out.println(IdentityAuthenticationController.token);
+//            httpConc.setRequestProperty("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyVHlwZSI6MSwiand0VHlwZSI6InVzZXIiLCJ1c2VySWQiOiI0MyIsInRlbmFudElkIjoiMSIsInVzZXJuYW1lIjoieGlhbmdzaHUiLCJzZXNzaW9uVG9rZW4iOiI1ZTA2NDhiM2FmOWM0YjI3OTlkZGViZTYzYWM4ZTZjMCIsImlzcyI6ImRyaWdodCIsInN1YiI6ImFjY2Vzc1Rva2VuIiwiaWF0IjoxNjc1OTEwNzI5LCJuYmYiOjE2NzU5MTA2Njl9.LqR1cmOqzzKUr_yUrOQmiHpEBi-Mm16i2ABwczFwCYA");
             String encryptedData = data;
             result = doPost(httpConc, encryptedData);
 //            log.info("response =" + respsonse);
@@ -455,6 +457,7 @@ public class InterTest {
             httpConc.setRequestMethod("GET");
             httpConc.setRequestProperty("accept", "*/*");
             httpConc.setRequestProperty("Authorization", "Bearer " + IdentityAuthenticationController.token);
+//            httpConc.setRequestProperty("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyVHlwZSI6MSwiand0VHlwZSI6InVzZXIiLCJ1c2VySWQiOiI0MyIsInRlbmFudElkIjoiMSIsInVzZXJuYW1lIjoieGlhbmdzaHUiLCJzZXNzaW9uVG9rZW4iOiI1ZTA2NDhiM2FmOWM0YjI3OTlkZGViZTYzYWM4ZTZjMCIsImlzcyI6ImRyaWdodCIsInN1YiI6ImFjY2Vzc1Rva2VuIiwiaWF0IjoxNjc1OTEwNzI5LCJuYmYiOjE2NzU5MTA2Njl9.LqR1cmOqzzKUr_yUrOQmiHpEBi-Mm16i2ABwczFwCYA");
             httpConc.connect();
             result = readStreamToStr(httpConc);
 //            log.info("response =" + respsonse);

@@ -24,7 +24,7 @@ public class CityPoliceController {
     */
     @PostMapping("/code-exception")
     public JSONObject codeException(HttpServletRequest request){
-        String baseUrl = "http://172.23.56.68/gatehub/rsdb_test-00001/api/datashare/share/api/RSDB_STB_DTL_YLWS_SMYCSJXX_A_D/v1";
+        String baseUrl = "http://172.23.56.68/order-detailgatehub/rsdb_test-00001/api/datashare/share/api/RSDB_STB_DTL_YLWS_SMYCSJXX_A_D/v1";
         JSONObject jsonObject = JSONObject.parseObject(InterTest.getResponse(baseUrl,InterTest.readRequestStream(request)));
         return jsonObject;
     }
@@ -271,8 +271,21 @@ public class CityPoliceController {
         if (jsonObject1.getJSONArray("data").size() > 0){
             jsonObject1.put("imageUrl","/picture/weather/" + jsonObject1.getJSONArray("data").getJSONObject(0).getString("YJMC").substring(0,3) +"@2x.png");
             return jsonObject1;
-        }else{
-            return JSONObject.parseObject("当天无数据");
         }
+        return jsonObject1;
     }
+
+    /**
+     * @Description: 应急预警当日数据
+     * @Param:
+     * @return:
+     * @Author: hui
+     * @Date: 2023/1/29
+     */
+    @PostMapping("/emergency-warning-event-day")
+    public JSONObject emergencyWarningEventDay(){
+        String baseUrl = "http://172.23.56.68/gatehub/rsdb_test-00001/api/datashare/share/api/RSDB_SDB_DTL_YJGL_DTYJSJSJXX_A_D/v1";
+        return JSONObject.parseObject(InterTest.getResponse(baseUrl,null));
+    }
+
 }

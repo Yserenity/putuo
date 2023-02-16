@@ -48,9 +48,10 @@ public class IdentityAuthenticationController {
                 map.put("token",token);
                 return map;
             }
-        }else {
+        }else if(token == null || "".equals(token)){
             map.put("message","无token");
         }
+        map.put("token",token);
         return map;
     }
 }

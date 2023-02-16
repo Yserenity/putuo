@@ -90,7 +90,7 @@ public class SafetyDangerController {
      */
     @PostMapping("overview-year")
     public JSONObject overviewYear(){
-        String baseUrl = "http://172.23.56.68/gatehub/rsdb_test-00001/api/cityos/hue/v1/datashare/exec/datashare171675864582089";
+        String baseUrl = "http://172.23.56.68/gatehub/rsdb_test-00001/api/cityos/hue/v1/datashare/exec/datashare171675997927983";
         return JSONObject.parseObject(InterTest.getResponse(baseUrl,null));
     }
 
@@ -161,6 +161,39 @@ public class SafetyDangerController {
     }
 
     /**
+     * @Description: 安全生产概览-月
+     * @Author: hui
+     * @Date: 2023/2/8
+     */
+    @PostMapping("overview-month")
+    public JSONObject overviewMonth(){
+        String baseUrl = "http://172.23.56.68/gatehub/rsdb_test-00001/api/cityos/hue/v1/datashare/exec/datashare171675863593316";
+        return JSONObject.parseObject(InterTest.getResponse(baseUrl,null));
+    }
+
+    /**
+     * @Description: 隐患数量top5公司-月
+     * @Author: hui
+     * @Date: 2023/2/8
+     */
+    @PostMapping("danger-count-company-top5-month")
+    public JSONObject dangerCountCompanyTop5Month(){
+        String baseUrl = "http://172.23.56.68/gatehub/rsdb_test-00001/api/cityos/hue/v1/datashare/exec/datashare171675864000813";
+        return JSONObject.parseObject(InterTest.getResponse(baseUrl,null));
+    }
+
+    /**
+     * @Description: 企业自行上报隐患-月
+     * @Author: hui
+     * @Date: 2023/2/8
+     */
+    @PostMapping("danger-report-company-month")
+    public JSONObject dangerReportCompanyMonth(){
+        String baseUrl = "http://172.23.56.68/gatehub/rsdb_test-00001/api/cityos/hue/v1/datashare/exec/datashare171675863695267";
+        return JSONObject.parseObject(InterTest.getResponse(baseUrl,null));
+    }
+
+    /**
      * @Description: 安全生产概览-日
      * @Author: hui
      * @Date: 2023/2/8
@@ -180,5 +213,16 @@ public class SafetyDangerController {
     public JSONObject companyReportDangerDay(){
         String baseUrl = "http://172.23.56.68/gatehub/rsdb_test-00001/api/cityos/hue/v1/datashare/exec/datashare161675861045748";
         return JSONObject.parseObject(InterTest.getResponse(baseUrl,null));
+    }
+
+    /**
+     * @Description: 企业自行上报隐患详情-日
+     * @Author: hui
+     * @Date: 2023/2/8
+     */
+    @PostMapping("company-report-danger-detail-day")
+    public JSONObject companyReportDangerDetailDay(@RequestBody JSONObject jsonObject){
+        String baseUrl = "http://172.23.56.68/gatehub/rsdb_test-00001/api/datashare/share/api/SDB_DB_GGAQ_QYZXSBAJXQ_A_D/v1";
+        return JSONObject.parseObject(InterTest.getResponse(baseUrl,jsonObject.toJSONString()));
     }
 }

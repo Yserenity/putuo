@@ -233,4 +233,14 @@ public class HotLineController {
         String baseUrl = "http://172.23.56.68/gatehub/rsdb_test-00001/api/datashare/share/api/RSDB_CDB_DB_RXGL_SMRXCZL_2021NJS_A_D/v1";
         return JSONObject.parseObject(InterTest.getResponse(baseUrl,""));
     }
+
+    /**
+     * 网格热线热力图
+     * @return
+     */
+    @PostMapping("/grid-hotline-diagram")
+    public JSONObject gridHotlineDiagram(){
+        String baseUrl = "http://172.23.56.68/gatehub/rsdb_test-00001/api/datashare/share/api/RSDB_TDB_STS_TSZL_WGRXDTJSJ_A_D/v1";
+        return JSONObject.parseObject(InterTest.getResponse(baseUrl,null));
+    }
 }
