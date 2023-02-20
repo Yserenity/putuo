@@ -51,14 +51,13 @@ public class CityVienController {
 
     /**
      * 进出站人数TOP3
-     * @param request
+     * @param jsonObject
      * @return
      */
     @PostMapping("/arrivals-number-TOP3")
-    public JSONObject arrivalsNumberTOP3(HttpServletRequest request){
+    public JSONObject arrivalsNumberTOP3(@RequestBody JSONObject jsonObject){
         String baseUrl = "http://172.23.56.68/gatehub/rsdb_test-00001/api/datashare/share/api/RSDB_SDB_DB_JTYS_HIST_RAILSTATION_FLOW_BYDAY_A_D_1/v1";
-        JSONObject jsonObject = JSONObject.parseObject(InterTest.getResponse(baseUrl,InterTest.readRequestStream(request)));
-        return jsonObject;
+        return JSONObject.parseObject(InterTest.getResponse(baseUrl,jsonObject.toJSONString()));
     }
 
     /** 

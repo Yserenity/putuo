@@ -23,9 +23,22 @@ public class IndexController {
     * @Author: hui
     * @Date: 2023/2/16
     */
-    @PostMapping("new-hot-word-top20")
+    @PostMapping("/new-hot-word-top20")
     public JSONObject newWordHotWord(){
         String baseUrl = "http://172.23.56.68/gatehub/rsdb_test-00001/api/datashare/share/api/RSDB_SDB_DTL_CSFW_DTXCTOP20_A_D/v1";
+        return JSONObject.parseObject(InterTest.getResponse(baseUrl,null));
+    }
+
+    /** 
+    * @Description: 重大办信息
+    * @Param: 
+    * @return: 
+    * @Author: hui
+    * @Date: 2023/2/17
+    */
+    @PostMapping("/major-affair-info")
+    public JSONObject majorAffairInfo(){
+        String baseUrl = "http://172.23.56.68/gatehub/rsdb_test-00001/api/datashare/share/api/RSDB_CDB_FL_JGW_CYZP_ZDXMXX_A_D/v1";
         return JSONObject.parseObject(InterTest.getResponse(baseUrl,null));
     }
 }

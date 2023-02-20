@@ -142,4 +142,18 @@ public class AISearchingController {
         Map<String, String> queryMap = new HashMap();
         return JSONObject.parseObject(InterTest.getResponseByZhiSouGet(baseUrl,queryMap));
     }
+
+    /** 
+    * @Description: 查询类型数量
+    * @Param: 
+    * @return: 
+    * @Author: hui
+    * @Date: 2023/2/20
+    */
+    @PostMapping("/search-type-count")
+    public JSONObject searchTypeCount(@RequestBody JSONObject jsonObject){
+        String body = jsonObject.toJSONString();
+        String baseUrl = "http://172.23.56.68/api/cityos/cityos-unidom-custom/v1/custom/mapxysearch/mapBizTypeListAddCondition";
+        return JSONObject.parseObject(InterTest.getResponseByZhiSou(baseUrl,body));
+    }
 }
