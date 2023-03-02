@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.entity.ContentType;
@@ -440,36 +441,27 @@ public class InterTest {
     }
 
     /**
-     * 智搜-get请求
+     * 智搜get请求
      * @param baseUrl
      * @param queryMap
      * @return
      */
-    public static String getResponseByZhiSouGet(String baseUrl,Map<String, String> queryMap){
+    public static String zhisouByGet(String baseUrl,Map<String, String> queryMap){
         String result = null;
-        try {
-            String _url = handleQuery(baseUrl, queryMap);
-            URL url = new URL(_url);
-//            log.info("url: " + url);
-            HttpURLConnection httpConc = (HttpURLConnection) url.openConnection();
-            httpConc.setConnectTimeout(60000);
-            httpConc.setReadTimeout(300000);
-            httpConc.setRequestMethod("GET");
-            httpConc.setRequestProperty("accept", "*/*");
-            httpConc.setRequestProperty("Authorization", "Bearer " + IdentityAuthenticationController.token);
-//            httpConc.setRequestProperty("Authorization", "Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyVHlwZSI6MSwiand0VHlwZSI6InVzZXIiLCJ1c2VySWQiOiI0MyIsInRlbmFudElkIjoiMSIsInVzZXJuYW1lIjoieGlhbmdzaHUiLCJzZXNzaW9uVG9rZW4iOiI1ZTA2NDhiM2FmOWM0YjI3OTlkZGViZTYzYWM4ZTZjMCIsImlzcyI6ImRyaWdodCIsInN1YiI6ImFjY2Vzc1Rva2VuIiwiaWF0IjoxNjc1OTEwNzI5LCJuYmYiOjE2NzU5MTA2Njl9.LqR1cmOqzzKUr_yUrOQmiHpEBi-Mm16i2ABwczFwCYA");
-            httpConc.connect();
-            result = readStreamToStr(httpConc);
-//            log.info("response =" + respsonse);
+        try{
+            String url = handleQuery(baseUrl, queryMap);
+//            URLEncoder.encode(url,"UTF-8");
+            CloseableHttpClient closeableHttpClient = HttpClients.createDefault();
+            HttpGet httpGet = new HttpGet(url);
+            httpGet.setHeader("Authorization","Bearer " + IdentityAuthenticationController.token);
+            HttpResponse httpResponse = closeableHttpClient.execute(httpGet);
+            result = readStreamToStrGet(httpResponse);
         }catch (Exception e){
             e.printStackTrace();
         }
         return result;
     }
 
-    /**
-     * 智搜GET请求
-     */
     /**
      * 发送get请求，参数为json
      * @param url

@@ -51,7 +51,7 @@ public class AISearchingController {
             type = "m_case";
         }
         String baseUrl = "http://172.23.56.68/api/cityos/cityos-unidom-search/v1/mapxysearch/mapBizTypeList/" + type;
-        return JSONObject.parseObject(InterTest.getResponseByZhiSouGet(baseUrl,queryMap));
+        return JSONObject.parseObject(InterTest.zhisouByGet(baseUrl,queryMap));
     }
 
     /** 
@@ -75,7 +75,7 @@ public class AISearchingController {
             type = "m_case";
         }
         String baseUrl = "http://172.23.56.68/api/cityos/cityos-unidom-search/v1/mapxysearch/moduleDetail/" + type + "/" + id;
-        return JSONObject.parseObject(InterTest.getResponseByZhiSouGet(baseUrl,queryMap));
+        return JSONObject.parseObject(InterTest.zhisouByGet(baseUrl,queryMap));
     }
 
     /**
@@ -140,7 +140,7 @@ public class AISearchingController {
     public JSONObject moduleList(HttpServletRequest request){
         String baseUrl = "http://172.23.56.68/api/cityos/cityos-unidom-search/v1/mapxysearch/mapModuleDefList";
         Map<String, String> queryMap = new HashMap();
-        return JSONObject.parseObject(InterTest.getResponseByZhiSouGet(baseUrl,queryMap));
+        return JSONObject.parseObject(InterTest.zhisouByGet(baseUrl,queryMap));
     }
 
     /** 
@@ -156,4 +156,32 @@ public class AISearchingController {
         String baseUrl = "http://172.23.56.68/api/cityos/cityos-unidom-custom/v1/custom/mapxysearch/mapBizTypeListAddCondition";
         return JSONObject.parseObject(InterTest.getResponseByZhiSou(baseUrl,body));
     }
+
+    /** 
+    * @Description: 智搜列表模式接口
+    * @Param: 
+    * @return: 
+    * @Author: hui
+    * @Date: 2023/3/2
+    */
+    @GetMapping("/list-model")
+    public JSONObject listModel(HttpServletRequest request){
+        String code = request.getParameter("moduleCode");
+        String type = null;
+        if ("1".equals(code)){
+            type = "m_event";
+        }else if ("2".equals(code)){
+            type = "m_iot";
+        }else if ("3".equals(code)){
+            type = "m_case";
+        }
+        String baseUrl = "http://172.23.56.68/api/cityos/cityos-unidom-search/v1/fulltext/modulesearch/" + type;
+        Map<String, String[]> parameterMap = request.getParameterMap();
+        Map<String,String> map = new HashMap<>();
+        for(String s : parameterMap.keySet()){
+            map.put(s,parameterMap.get(s)[0]);
+        }
+        return JSONObject.parseObject(InterTest.zhisouByGet(baseUrl,map));
+    }
+
 }
