@@ -2,6 +2,7 @@ package com.dataojo.putuo.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.dataojo.putuo.util.InterTest;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,19 +40,21 @@ public class IdentityAuthenticationController {
     @GetMapping("/get-token")
     public static Map<String,String> token(HttpServletRequest request){
         Map<String,String> map = new HashMap();
-        if(request.getParameter("token") != null){
+        String token2 = request.getParameter("token");
+        // if(request.getParameter("token") != null && request.getParameter("token") != ""){
+        if(StringUtils.hasText(token2)&&token2.length() > 50){
             if(request.getParameter("token").equals(IdentityAuthenticationController.token)){
-                map.put("token",token);
+                map.put("token", IdentityAuthenticationController.token);
                 return map;
             }else{
                 IdentityAuthenticationController.token = request.getParameter("token");
-                map.put("token",token);
+                map.put("token", IdentityAuthenticationController.token);
                 return map;
             }
-        }else if(token == null || "".equals(token)){
+        }else if(IdentityAuthenticationController.token == null || "".equals(IdentityAuthenticationController.token)){
             map.put("message","无token");
         }
-        map.put("token",token);
+        map.put("token", IdentityAuthenticationController.token);
         return map;
     }
 }
